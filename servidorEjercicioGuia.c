@@ -12,6 +12,9 @@ int contador;
 //Estructura necesaria para acceso excluyente
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
+int i;
+int sockets[100];
+
 void *AtenderCliente (void *socket)
 {
 	int sock_conn;
@@ -59,24 +62,22 @@ void *AtenderCliente (void *socket)
 		
 		if (codigo ==0) //petici?n de desconexi?n
 			terminar=1;
-		else if (codigo ==4)
-			sprintf (respuesta,"%d",contador);
 		else if (codigo ==1) //piden la longitd del nombre
-			sprintf (respuesta,"%d",strlen (nombre));
+			sprintf (respuesta,"1/%d",strlen (nombre));
 		else if (codigo ==2)
 			// quieren saber si el nombre es bonito
 			if((nombre[0]=='M') || (nombre[0]=='S'))
-			strcpy (respuesta,"SI");
+			strcpy (respuesta,"2/SI");
 			else
-				strcpy (respuesta,"NO");
+				strcpy (respuesta,"2/NO");
 			else //quiere saber si es alto
 			{
 				p = strtok( NULL, "/");
 				float altura =  atof (p);
 				if (altura > 1.70)
-					sprintf (respuesta, "%s: eres alto",nombre);
+					sprintf (respuesta, "3/%s: eres alto",nombre);
 				else
-					sprintf (respuesta, "%s: eresbajo",nombre);
+					sprintf (respuesta, "3/%s: eres bajo",nombre);
 			}
 			
 			if (codigo !=0)
@@ -91,6 +92,13 @@ void *AtenderCliente (void *socket)
 				pthread_mutex_lock( &mutex ); //No me interrumpas ahora
 				contador = contador +1;
 				pthread_mutex_unlock( &mutex); //ya puedes interrumpirme
+				// notificar a todos los clientes conectados
+				char notificacion[20];
+				sprintf (notificacion, "4/%d",contador);
+				int j;
+				for (j=0; j< i; j++)
+					write (sockets[j],notificacion, strlen(notificacion));
+					
 			}
 			
 	}
@@ -128,8 +136,7 @@ int main(int argc, char *argv[])
 		printf("Error en el Listen");
 	
 	contador =0;
-	int i;
-	int sockets[100];
+	
 	pthread_t thread;
 	i=0;
 	// Bucle para atender a 5 clientes
@@ -148,6 +155,7 @@ int main(int argc, char *argv[])
 		i=i+1;
 		
 	}
-
+	
+	
 	
 }

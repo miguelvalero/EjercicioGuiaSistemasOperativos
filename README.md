@@ -5,3 +5,4 @@
     VersionConConexionDesconexion
     VersionConcurrente
     VersionConExclusionMutua
+    VersionConNotificaciones

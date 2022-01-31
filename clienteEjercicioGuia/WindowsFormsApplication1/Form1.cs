@@ -8,15 +8,21 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
+
 
 namespace WindowsFormsApplication1
 {
     public partial class Form1 : Form
     {
         Socket server;
+        Thread atender;
+
         public Form1()
         {
             InitializeComponent();
+            CheckForIllegalCrossThreadCalls = false; //Necesario para que los elementos de los formularios puedan ser
+            //accedidos desde threads diferentes a los que los crearon
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -25,12 +31,53 @@ namespace WindowsFormsApplication1
            
         }
 
+
+        private void AtenderServidor()
+        {
+            while (true)
+            {
+                //Recibimos mensaje del servidor
+                byte[] msg2 = new byte[80];
+                server.Receive(msg2);
+                string[] trozos = Encoding.ASCII.GetString(msg2).Split('/');
+                int codigo = Convert.ToInt32(trozos[0]);
+                string mensaje = mensaje = trozos[1].Split('\0')[0];
+
+                switch (codigo)
+                {
+                    case 1:  // respuesta a longitud
+
+                        MessageBox.Show("La longitud de tu nombre es: " + mensaje);
+                        break;
+                    case 2:      //respuesta a si mi nombre es bonito
+
+                        if (mensaje == "SI")
+                            MessageBox.Show("Tu nombre ES bonito.");
+                        else
+                            MessageBox.Show("Tu nombre NO bonito. Lo siento.");
+                        break;
+                    case 3:       //Recibimos la respuesta de si soy alto
+
+                        MessageBox.Show(mensaje);
+                        break;
+                    case 4:     //Recibimos notificacion
+
+                        contLbl.Text = mensaje;
+                        break;
+                }
+            }
+        }
+
+
+                    
+
+
         private void button1_Click(object sender, EventArgs e)
         {
             //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
             //al que deseamos conectarnos
             IPAddress direc = IPAddress.Parse("192.168.56.102");
-            IPEndPoint ipep = new IPEndPoint(direc, 9060);
+            IPEndPoint ipep = new IPEndPoint(direc, 9050);
             
 
             //Creamos el socket 
@@ -41,6 +88,11 @@ namespace WindowsFormsApplication1
                 this.BackColor = Color.Green;
                 MessageBox.Show("Conectado");
 
+                //pongo en marcha el thread que atenderá los mensajes del servidor
+                ThreadStart ts = delegate { AtenderServidor(); };
+                atender = new Thread(ts);
+                atender.Start();
+
             }
             catch (SocketException ex)
             {
@@ -48,6 +100,7 @@ namespace WindowsFormsApplication1
                 MessageBox.Show("No he podido conectar con el servidor");
                 return;
             }
+
 
         }
 
@@ -60,11 +113,6 @@ namespace WindowsFormsApplication1
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
 
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split ('\0')[0];
-                MessageBox.Show("La longitud de tu nombre es: " + mensaje);
             }
             else if (Bonito.Checked)
             {
@@ -73,16 +121,7 @@ namespace WindowsFormsApplication1
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
 
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-
-
-                if (mensaje == "SI")
-                    MessageBox.Show("Tu nombre ES bonito.");
-                else
-                    MessageBox.Show("Tu nombre NO bonito. Lo siento.");
+             
 
             }
             else
@@ -93,11 +132,7 @@ namespace WindowsFormsApplication1
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
 
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                MessageBox.Show(mensaje);
+              
             }
              
         
@@ -112,6 +147,7 @@ namespace WindowsFormsApplication1
             server.Send(msg);
 
             // Nos desconectamos
+            atender.Abort();
             this.BackColor = Color.Gray;
             server.Shutdown(SocketShutdown.Both);
             server.Close();
@@ -119,21 +155,7 @@ namespace WindowsFormsApplication1
 
         }
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-            //Pedir numero de servicios realizados
-            string mensaje = "4/";
-
-            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-            server.Send(msg);
-
-            //Recibimos la respuesta del servidor
-            byte[] msg2 = new byte[80];
-            server.Receive(msg2);
-            mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-            contLbl.Text= mensaje;
-        }
-
+     
      
     }
 }
