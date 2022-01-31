@@ -34,11 +34,13 @@
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Longitud = new System.Windows.Forms.RadioButton();
-            this.Bonito = new System.Windows.Forms.RadioButton();
             this.altura = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
             this.alturaBox = new System.Windows.Forms.TextBox();
+            this.Bonito = new System.Windows.Forms.RadioButton();
             this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.contLbl = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -109,17 +111,6 @@
             this.Longitud.Text = "Dime la longitud de mi nombre";
             this.Longitud.UseVisualStyleBackColor = true;
             // 
-            // Bonito
-            // 
-            this.Bonito.AutoSize = true;
-            this.Bonito.Location = new System.Drawing.Point(116, 68);
-            this.Bonito.Name = "Bonito";
-            this.Bonito.Size = new System.Drawing.Size(156, 17);
-            this.Bonito.TabIndex = 8;
-            this.Bonito.TabStop = true;
-            this.Bonito.Text = "Dime si mi nombre es bonito";
-            this.Bonito.UseVisualStyleBackColor = true;
-            // 
             // altura
             // 
             this.altura.AutoSize = true;
@@ -147,6 +138,17 @@
             this.alturaBox.Size = new System.Drawing.Size(62, 20);
             this.alturaBox.TabIndex = 9;
             // 
+            // Bonito
+            // 
+            this.Bonito.AutoSize = true;
+            this.Bonito.Location = new System.Drawing.Point(116, 68);
+            this.Bonito.Name = "Bonito";
+            this.Bonito.Size = new System.Drawing.Size(156, 17);
+            this.Bonito.TabIndex = 8;
+            this.Bonito.TabStop = true;
+            this.Bonito.Text = "Dime si mi nombre es bonito";
+            this.Bonito.UseVisualStyleBackColor = true;
+            // 
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -158,11 +160,33 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // button4
+            // 
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.Location = new System.Drawing.Point(428, 129);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(180, 58);
+            this.button4.TabIndex = 11;
+            this.button4.Text = "¿Cuántos servicios?";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // contLbl
+            // 
+            this.contLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.contLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.contLbl.Location = new System.Drawing.Point(443, 195);
+            this.contLbl.Name = "contLbl";
+            this.contLbl.Size = new System.Drawing.Size(148, 92);
+            this.contLbl.TabIndex = 12;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(741, 562);
+            this.Controls.Add(this.contLbl);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
@@ -188,6 +212,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox alturaBox;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Label contLbl;
     }
 }
 
