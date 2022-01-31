@@ -82,7 +82,7 @@ namespace WindowsFormsApplication1
                 if (mensaje == "SI")
                     MessageBox.Show("Tu nombre ES bonito.");
                 else
-                    MessageBox.Show("Tu nombre NO bonito. Lo siento.");
+                    MessageBox.Show("Tu nombre NO es bonito. Lo siento.");
 
             }
             else
