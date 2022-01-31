@@ -48,13 +48,15 @@ void *AtenderCliente (void *socket)
 		// vamos a ver que quieren
 		char *p = strtok( peticion, "/");
 		int codigo =  atoi (p);
+		int numForm;
 		// Ya tenemos el c?digo de la petici?n
 		char nombre[20];
 		
-		if ((codigo !=0)&&(codigo!=4))
+		if (codigo !=0)
 		{
 			p = strtok( NULL, "/");
-			
+			numForm =  atoi (p);
+			p = strtok( NULL, "/");
 			strcpy (nombre, p);
 			// Ya tenemos el nombre
 			printf ("Codigo: %d, Nombre: %s\n", codigo, nombre);
@@ -63,21 +65,21 @@ void *AtenderCliente (void *socket)
 		if (codigo ==0) //petici?n de desconexi?n
 			terminar=1;
 		else if (codigo ==1) //piden la longitd del nombre
-			sprintf (respuesta,"1/%d",strlen (nombre));
+			sprintf (respuesta,"1/%d/%d",numForm,strlen (nombre));
 		else if (codigo ==2)
 			// quieren saber si el nombre es bonito
 			if((nombre[0]=='M') || (nombre[0]=='S'))
-			strcpy (respuesta,"2/SI");
+			sprintf (respuesta,"2/%d/SI", numForm);
 			else
-				strcpy (respuesta,"2/NO");
+				sprintf (respuesta,"2/%d/NO", numForm);
 			else //quiere saber si es alto
 			{
 				p = strtok( NULL, "/");
 				float altura =  atof (p);
 				if (altura > 1.70)
-					sprintf (respuesta, "3/%s: eres alto",nombre);
+					sprintf (respuesta, "3/%d/%s: eres alto",numForm,nombre);
 				else
-					sprintf (respuesta, "3/%s: eres bajo",nombre);
+					sprintf (respuesta, "3/%d/%s: eres bajo",numForm, nombre);
 			}
 			
 			if (codigo !=0)
@@ -98,7 +100,7 @@ void *AtenderCliente (void *socket)
 				int j;
 				for (j=0; j< i; j++)
 					write (sockets[j],notificacion, strlen(notificacion));
-					
+				
 			}
 			
 	}
@@ -139,7 +141,6 @@ int main(int argc, char *argv[])
 	
 	pthread_t thread;
 	i=0;
-	// Bucle para atender a 5 clientes
 	for (;;){
 		printf ("Escuchando\n");
 		
@@ -156,6 +157,6 @@ int main(int argc, char *argv[])
 		
 	}
 	
-	
+
 	
 }

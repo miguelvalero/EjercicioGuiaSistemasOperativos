@@ -18,7 +18,9 @@ namespace WindowsFormsApplication1
         Socket server;
         Thread atender;
 
- 
+        delegate void DelegadoParaPonerTexto(string texto);
+
+        List<Form2> formularios = new List<Form2>();
 
         public Form1()
         {
@@ -34,13 +36,6 @@ namespace WindowsFormsApplication1
         }
 
 
-        private void PonContador(string mensaje)
-        {
-            contLbl.Text = mensaje;
-        }
-
-
-
 
         private void AtenderServidor()
         {
@@ -51,27 +46,36 @@ namespace WindowsFormsApplication1
                 server.Receive(msg2);
                 string[] trozos = Encoding.ASCII.GetString(msg2).Split('/');
                 int codigo = Convert.ToInt32(trozos[0]);
-                string mensaje = mensaje = trozos[1].Split('\0')[0];
-
+                string mensaje;
+               
+                int nform;
                 switch (codigo)
                 {
                     case 1:  // respuesta a longitud
-
-                        MessageBox.Show("La longitud de tu nombre es: " + mensaje);
+                         
+                         nform = Convert.ToInt32(trozos[1]);
+                         mensaje = trozos[2].Split('\0')[0];
+                         formularios[nform].TomaRespuesta1(mensaje);
+                      
                         break;
                     case 2:      //respuesta a si mi nombre es bonito
-
-                        if (mensaje == "SI")
-                            MessageBox.Show("Tu nombre ES bonito.");
-                        else
-                            MessageBox.Show("Tu nombre NO bonito. Lo siento.");
+                        
+                         nform = Convert.ToInt32(trozos[1]);
+                         mensaje = trozos[2].Split('\0')[0];
+                         formularios[nform].TomaRespuesta2(mensaje);
+                        
                         break;
                     case 3:       //Recibimos la respuesta de si soy alto
-
-                        MessageBox.Show(mensaje);
+                         nform = Convert.ToInt32(trozos[1]);
+                         mensaje = trozos[2].Split('\0')[0];
+                         formularios[nform].TomaRespuesta3(mensaje);
                         break;
+
                     case 4:     //Recibimos notificacion
 
+                 
+                        mensaje = trozos[1].Split('\0')[0];
+                       
                         //Haz tu lo que no me dejas hacer a mi
                         contLbl.Invoke(new Action(() =>
                         {
@@ -115,44 +119,11 @@ namespace WindowsFormsApplication1
                 return;
             }
 
-        
+          
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (Longitud.Checked)
-            {
-                string mensaje = "1/" + nombre.Text;
-                // Enviamos al servidor el nombre tecleado
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-
-            }
-            else if (Bonito.Checked)
-            {
-                string mensaje = "2/" + nombre.Text;
-                // Enviamos al servidor el nombre tecleado
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-
-             
-
-            }
-            else
-            {
-                // Enviamos nombre y altura
-                string mensaje = "3/" + nombre.Text + "/" + alturaBox.Text;
-                // Enviamos al servidor el nombre tecleado
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-
-              
-            }
-             
-        
-        }
-
+     
         private void button3_Click(object sender, EventArgs e)
         {
             //Mensaje de desconexión
@@ -169,6 +140,40 @@ namespace WindowsFormsApplication1
 
 
         }
+        private void PonerEnMarchaFormulario()
+        {
+            int cont = formularios.Count;
+            Form2 f = new Form2(cont, server);
+            formularios.Add(f);
+            f.ShowDialog();
+          
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ThreadStart ts = delegate { PonerEnMarchaFormulario(); };
+            Thread T = new Thread(ts);
+            T.Start();  
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //Mensaje de desconexión
+            string mensaje = "0/";
+
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+
+            // Nos desconectamos
+            atender.Abort();
+            this.BackColor = Color.Gray;
+            server.Shutdown(SocketShutdown.Both);
+            server.Close();
+
+        }
+
+       
 
      
      

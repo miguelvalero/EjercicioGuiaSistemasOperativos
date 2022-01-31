@@ -7,3 +7,4 @@
     VersionConExclusionMutua
     VersionConNotificaciones
     VersionConProteccionCrossThreading
+    VersionConMultiplesFormularios
