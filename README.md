@@ -1,4 +1,3 @@
-# Ejercicio Guia  
-# SistemasOperativos  
+# Ejercicio Guia de Sistemas Operativos  
 ##  Tags:   
-### VersionInicial
+     ### VersionInicial
