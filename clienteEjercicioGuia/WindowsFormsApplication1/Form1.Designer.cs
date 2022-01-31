@@ -34,6 +34,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Longitud = new System.Windows.Forms.RadioButton();
             this.Bonito = new System.Windows.Forms.RadioButton();
+            this.altura = new System.Windows.Forms.RadioButton();
+            this.alturaBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,7 +58,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(130, 144);
+            this.button2.Location = new System.Drawing.Point(125, 193);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
@@ -67,6 +69,8 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.groupBox1.Controls.Add(this.alturaBox);
+            this.groupBox1.Controls.Add(this.altura);
             this.groupBox1.Controls.Add(this.Longitud);
             this.groupBox1.Controls.Add(this.Bonito);
             this.groupBox1.Controls.Add(this.label2);
@@ -101,6 +105,24 @@
             this.Bonito.Text = "Dime si mi nombre es bonito";
             this.Bonito.UseVisualStyleBackColor = true;
             // 
+            // altura
+            // 
+            this.altura.AutoSize = true;
+            this.altura.Location = new System.Drawing.Point(115, 114);
+            this.altura.Name = "altura";
+            this.altura.Size = new System.Drawing.Size(98, 17);
+            this.altura.TabIndex = 9;
+            this.altura.TabStop = true;
+            this.altura.Text = "Dime si soy alto";
+            this.altura.UseVisualStyleBackColor = true;
+            // 
+            // alturaBox
+            // 
+            this.alturaBox.Location = new System.Drawing.Point(17, 114);
+            this.alturaBox.Name = "alturaBox";
+            this.alturaBox.Size = new System.Drawing.Size(77, 20);
+            this.alturaBox.TabIndex = 10;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -124,6 +146,8 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton Longitud;
         private System.Windows.Forms.RadioButton Bonito;
+        private System.Windows.Forms.TextBox alturaBox;
+        private System.Windows.Forms.RadioButton altura;
     }
 }
 
