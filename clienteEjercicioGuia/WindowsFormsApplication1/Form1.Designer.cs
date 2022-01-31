@@ -161,6 +161,7 @@
             // 
             // contLbl
             // 
+            this.contLbl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.contLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.contLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.contLbl.Location = new System.Drawing.Point(443, 195);

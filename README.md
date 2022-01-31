@@ -6,3 +6,4 @@
     VersionConcurrente
     VersionConExclusionMutua
     VersionConNotificaciones
+    VersionConProteccionCrossThreading

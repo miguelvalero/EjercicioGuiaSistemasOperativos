@@ -18,10 +18,12 @@ namespace WindowsFormsApplication1
         Socket server;
         Thread atender;
 
+ 
+
         public Form1()
         {
             InitializeComponent();
-            CheckForIllegalCrossThreadCalls = false; //Necesario para que los elementos de los formularios puedan ser
+            //CheckForIllegalCrossThreadCalls = false; //Necesario para que los elementos de los formularios puedan ser
             //accedidos desde threads diferentes a los que los crearon
         }
 
@@ -30,6 +32,14 @@ namespace WindowsFormsApplication1
 
            
         }
+
+
+        private void PonContador(string mensaje)
+        {
+            contLbl.Text = mensaje;
+        }
+
+
 
 
         private void AtenderServidor()
@@ -62,7 +72,12 @@ namespace WindowsFormsApplication1
                         break;
                     case 4:     //Recibimos notificacion
 
-                        contLbl.Text = mensaje;
+                        //Haz tu lo que no me dejas hacer a mi
+                        contLbl.Invoke(new Action(() =>
+                        {
+                            contLbl.Text = mensaje;
+                        }));
+
                         break;
                 }
             }
@@ -87,7 +102,6 @@ namespace WindowsFormsApplication1
                 server.Connect(ipep);//Intentamos conectar el socket
                 this.BackColor = Color.Green;
                 MessageBox.Show("Conectado");
-
                 //pongo en marcha el thread que atenderá los mensajes del servidor
                 ThreadStart ts = delegate { AtenderServidor(); };
                 atender = new Thread(ts);
@@ -101,6 +115,7 @@ namespace WindowsFormsApplication1
                 return;
             }
 
+        
 
         }
 
